@@ -9,11 +9,11 @@ import subprocess
 # KEY: TOKEN
 # VALUE: MANGLED NAME
 names = dict()
-TYPES = ['int', 'void', 'uint16_t', 'uint32_t', 'uint64_t', 'bool', 'auto', 'int32_t', 'string']
+TYPES = ['int', 'void', 'uint16_t', 'uint32_t', 'uint64_t', 'bool', 'auto', 'int32_t', 'string', 'istringstream']
 KEYWORDS = TYPES + ['return', 'printf', 'struct', 'main', 'std', 'vector', 'push_back', 'back',
             'pop_back', 'reserve', 'cout', '__builtin_bswap64', '__builtin_ctzll', 'const', 'assert',
             'endl', 'for', 'while', 'swap', 'if', 'else', 'char', 'abs', 'getline',
-            'break', 'length', 'switch', 'case', 'cin', 'istringstream', 'empty', 'continue', 'size',
+            'break', 'length', 'switch', 'case', 'cin', 'empty', 'continue', 'size',
             'default', 'using', 'namespace', '__builtin_popcountll', 'stoi', 'chrono', 'second',
             'high_resolution_clock', 'duration_cast', 'milliseconds', 'now', 'max', 'pair', 'stable_sort', 'greater']
 global counter, resets
@@ -220,7 +220,7 @@ def get_stats(tokens: list) -> dict:
         # Found a function
         # TODO: Not rely on types
         following = tokens[i + 1] if i + 1 < len(tokens) else None
-        if is_name(token) and prev in TYPES and following == '(':
+        if is_name(token) and preceded_by_type(structinfo, prev, prev_prev) and following == '(':
             print(token)
             entering_function = True
             function = token
